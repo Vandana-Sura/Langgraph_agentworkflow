@@ -1,0 +1,33 @@
+from langgraph import LangGraph
+from plan_agent import PlanAgent
+from tool_agent import ToolAgent
+from reflection import Reflection
+
+# Initialize LangGraph
+lang_graph = LangGraph()
+
+# Initialize PlanAgent
+plan_agent = PlanAgent(lang_graph)
+
+# Get the user query from input
+user_query = input("Enter your query: ")
+
+# PlanAgent splits the user query into sub-tasks
+plan_agent.split_query(user_query)
+
+# Initialize ToolAgent
+tool_agent = ToolAgent(lang_graph)
+
+# ToolAgent solves each task
+for task_id in lang_graph.list_tasks().keys():
+    result = tool_agent.solve_task(task_id)
+    print(result)
+
+# Initialize Reflection
+reflection = Reflection(lang_graph)
+
+# Reflection gives feedback
+for task_id in lang_graph.list_tasks().keys():
+    feedback = reflection.reflect_on_task(task_id)
+    print(feedback)
+
